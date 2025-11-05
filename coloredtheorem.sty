@@ -31,8 +31,16 @@
 \NewDocumentCommand{\TcbthGdef}{O{\tcbth}mm}{%
     \expandafter\gdef\csname#1#2\endcsname{#3}}
 
-\TcbthNewDocumentCommand{newtheorem} { m m O{} }{%
-  \expandafter\newcounter\expandafter{\tcbth#1}%
+\TcbthNewDocumentCommand{newtheorem} { m m O{} O{} }{%
+  \ifx\relax#4\relax
+    % No parent counter specified, create independent counter
+    \expandafter\newcounter\expandafter{\tcbth#1}%
+  \else
+    % Parent counter specified, create counter within parent
+    \expandafter\newcounter\expandafter{\tcbth#1}[#4]%
+    % Redefine the counter representation to include parent counter
+    \expandafter\renewcommand\csname the\tcbth#1\endcsname{\csname the#4\endcsname.\expandafter\arabic\expandafter{\tcbth#1}}%
+  \fi
   \TcbthGdef{#1name}{#2}%
   \TcbthGdef{list#1name}{List of #2s}%
   \TcbthGdef[]{#1autorefname}{#2}%

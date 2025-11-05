@@ -52,11 +52,12 @@ There is also a command to generate the corresponding _\listof..._
 
 * `\usepackage{coloredtheorem}`
   * Load Load the `coloredtheorem` package. This package will load `tcolorbox` if necessary.
-* `\cthnewtheorem{<envname>}{<Name>}[<tcolorbox options>]`
+* `\cthnewtheorem{<envname>}{<Name>}[<tcolorbox options>][<parent counter>]`
   * Create a new boxed algorithm-like environment.
     * `<envname>` is the suffix for the new environment being defined, e.g., `algoritm`. The effective environment name will be `cth<envname>`, e.g., `cthalgorithm`.
     * `<Name>` is the (printable) name or the new environment being defined, e.g., _Algorithm_.
     * `<tcolorbox options>` default options for the environment being defined (this argument is optional). These options are passed straight to the `tcolorbox` environment, so anything valid for `tcolorbox` is also valid here.
+    * `<parent counter>` optional parent counter to bind the theorem counter to (e.g., `section`, `chapter`). When specified, the theorem counter will reset whenever the parent counter increments and will be displayed with the parent counter value (e.g., Theorem 1.1, 1.2 for theorems in section 1). This argument is optional.
 * `\begin{<envname>}{<Caption>}[<tcolorbox options>]<Contents>\end{<envname>}`
   * Create a new _algorithm-like_ box with the given contents.
     ∗ `<AltCaption>` is the alternative caption for the `\cthlistof<envname>s` (see below).
@@ -83,6 +84,30 @@ Let’s start by creating two new environments, one for _algorithms_ and another
                                 attach title to upper={\\[0.5ex]}, 
                                 borderline west={1mm}{-2mm}{green!60!black}]
 ```
+
+
+### Binding Theorem Counters
+
+You can bind theorem counters to existing LaTeX counters like `section` or `chapter` by passing the parent counter name as the fourth optional argument to `\cthnewtheorem`. This causes the theorem counter to reset when the parent counter increments and displays the parent counter value in the numbering.
+
+```latex
+% Bind theorem counter to section - theorems will be numbered 1.1, 1.2, etc.
+\cthnewtheorem{theorem}{Theorem}[coltitle=black, colback=blue!10,
+                                  colframe=black!15][section]
+
+% Bind lemma counter to section - lemmas will be numbered 1.1, 1.2, etc.
+\cthnewtheorem{lemma}{Lemma}[coltitle=black, colback=green!10,
+                              colframe=green!15][section]
+
+% No binding - definitions will be numbered 1, 2, 3, etc. independently
+\cthnewtheorem{definition}{Definition}[coltitle=black, colback=yellow!10,
+                                        colframe=yellow!15]
+```
+
+With these definitions:
+- In Section 1: Theorem 1.1, Theorem 1.2, Lemma 1.1
+- In Section 2: Theorem 2.1 (counter reset), Lemma 2.1 (counter reset)
+- Definitions continue: Definition 1, Definition 2, Definition 3 (no reset)
 
 And this is a shiny thought!
 
