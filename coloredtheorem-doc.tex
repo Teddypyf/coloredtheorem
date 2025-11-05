@@ -164,6 +164,28 @@ Let's start by creating two new environments, one for \emph{algorithms} and anot
                                 attach title to upper={\\[0.5ex]}, 
                                 borderline west={1mm}{-2mm}{green!60!black}]
 
+
+\subsection{Binding Theorem Counters to Parent Counters}
+\label{subsec:counter-binding}
+
+You can bind theorem counters to existing \LaTeX\ counters like \texttt{section} or \texttt{chapter} by passing the parent counter name as the fourth optional argument to \mintinline{TeX}+\cthnewtheorem+. This causes the theorem counter to reset when the parent counter increments and displays the parent counter value in the numbering, similar to the standard \LaTeX\ \mintinline{TeX}+\newtheorem+ behavior.
+
+\begin{minted}[bgcolor=red!5,fontsize=\small,escapeinside=||]{TeX}
+% Bind theorem counter to section - theorems numbered 1.1, 1.2, etc.
+\cthnewtheorem{|\ca{theorem}|}{|\ca{Theorem}|}[|\co{coltitle=}|black, |\co{colback=}|blue!10,
+                                  |\co{colframe=}|black!15][|\co{section}|]
+
+% Bind lemma counter to section - lemmas numbered 1.1, 1.2, etc.
+\cthnewtheorem{|\ca{lemma}|}{|\ca{Lemma}|}[|\co{coltitle=}|black, |\co{colback=}|green!10,
+                              |\co{colframe=}|green!15][|\co{section}|]
+
+% No binding - definitions numbered 1, 2, 3, etc. independently
+\cthnewtheorem{|\ca{definition}|}{|\ca{Definition}|}[|\co{coltitle=}|black, |\co{colback=}|yellow!10,
+                                        |\co{colframe=}|yellow!15]
+\end{minted}
+
+With these definitions, in Section 1 you would have Theorem 1.1, Theorem 1.2, Lemma 1.1, and in Section 2 the counters reset to Theorem 2.1, Lemma 2.1. Definitions continue independently as Definition 1, Definition 2, Definition 3 without resetting.
+
 And this is a shiny thought!
 \begin{cththought}{This is a tought}
 \kant[2]
